@@ -1,11 +1,23 @@
 import PocketBase from "pocketbase";
 import installPocketBase from "pocketbase-installer";
+import { TypedPocketBase } from "./pocketbase-types";
+
+type PocketStackConfig = {
+  install?: boolean;
+  url?: string;
+};
 
 export default class PocketStack {
-  pb: PocketBase;
+  public pb: TypedPocketBase;
 
-  constructor() {
-    this.pb = new PocketBase("http://127.0.0.1:8090");
+  constructor({
+    install,
+    url = "http://127.0.0.1:8090",
+  }: PocketStackConfig = {}) {
+    if (install) {
+      this.setup();
+    }
+    this.pb = new PocketBase(url) as TypedPocketBase;
   }
 
   async setup() {
